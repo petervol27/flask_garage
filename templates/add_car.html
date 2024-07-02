@@ -1,0 +1,33 @@
+{%include 'header.html'%}
+<form method="POST" action="/add_car">
+  <div class="form-group">
+    <label class="control-label" for="car_number">Car Number:</label>
+    <input
+      type="number"
+      class="form-control"
+      id="car_number"
+      placeholder="Enter Car Number"
+      name="car_number"
+    />
+  </div>
+  <div class="form-group">
+    <label class="control-label" for="description">Car Description:</label>
+    <textarea
+      class="form-control"
+      id="description"
+      placeholder="Enter Car Description"
+      name="description"
+    ></textarea>
+  </div>
+  <div class="form-group">
+    <label class="control-label" for="image_url">Car Image Link:</label>
+    <input
+      class="form-control"
+      id="image_url"
+      name="image_url"
+      placeholder="Enter Car Image Link"
+      type="url"
+    />
+  </div>
+  <input type="submit" value="Add Car" />
+</form>

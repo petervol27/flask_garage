@@ -1,16 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    List of Cars:
+{% include 'header.html'%}
+    {%for car in car_list%}
+    <div class="container">
+      <div class="row center-container">
+        <div class="col-sm-4">
+          <div class="panel panel-success">
+            <div class="panel-heading">{{car['number']}}</div>
+            <div class="panel-body">
+              <a href="/single_car/{{car['id']}}"
+                ><img
+                  src="{{car['img']}}"
+                  class="img-responsive"
+                  style="width: 100%"
+                  alt="Image"
+              /></a>
+            </div>
+            <div class="panel-footer">{{car['description']}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
     <br />
-    {% for car in car_list %}
-    <li>Number:{{ car['number'] }} &nbsp; Problems:{{ car['problems'] }}</li>
-
-    {% endfor %}
+    {% endfor%}
+    <footer class="container-fluid text-center">
+      <p>Online Store Copyright</p>
+      <form class="form-inline">
+        Get deals:
+        <input
+          type="email"
+          class="form-control"
+          size="50"
+          placeholder="Email Address"
+        />
+        <button type="button" class="btn btn-danger">Sign Up</button>
+      </form>
+    </footer>
   </body>
 </html>
