@@ -1,33 +1,18 @@
 from flask import Flask, render_template, request, redirect, url_for
+from helpers.validation import capitalize_desc
+from storage.save_load import save, load
+from helpers.variables import problems
 
+PROBLEMS = problems
 app = Flask(__name__)
 
-car1 = {
-    "id": "1",
-    "number": "123-456",
-    "problems": [],
-    "img": "https://platform.cstatic-images.com/in/v2/stock_photos/90884105-7fd5-4da9-8479-27e482a4e479/2b678835-3279-4de7-8047-36484d4e2900.png",
-    "description": "Ford Mustang 2022",
-}
-car2 = {
-    "id": "2",
-    "number": "456-789",
-    "problems": [],
-    "img": "https://www.cars.com/i/large/in/v2/stock_photos/1fce77f4-454e-4338-b0ed-4b7c961910b2/c9dc2064-dd42-45ec-b973-c0a27688ed16.png",
-    "description": "Toyota Corolla 2002",
-}
-cars = [car1, car2]
+
+cars = load()
 
 
 @app.route("/")
 def cars_list():
-    return render_template("car_list.html", car_list=cars)
-
-    # final_str = ""
-    # for car in cars:
-    #     final_str += f"<p>{car['number']}</p>"
-
-    # return final_str
+    return render_template("car_list.html", car_list=cars, current_page="home")
 
 
 @app.route("/single_car/<id>")
@@ -40,22 +25,77 @@ def single_car(id):
 @app.route("/add_car", methods=["POST", "GET"])
 def add_car():
     if request.method == "POST":
+        selected_problems = request.form.getlist("problems")
+        car_problems = [
+            problem for problem in PROBLEMS if problem["name"] in selected_problems
+        ]
         cars.append(
             {
                 "id": str(int(cars[-1]["id"]) + 1),
                 "number": request.form["car_number"],
-                "problems": [],
+                "problems": car_problems,
                 "img": request.form["image_url"],
-                "description": request.form["description"],
+                "description": capitalize_desc(request.form["description"]),
+                "urgent": bool(request.form["is_urgent"]),
             }
         )
+        save(cars)
         return redirect("/")
-    return render_template("add_car.html")
+    return render_template("add_car.html", current_page="add_car", problems=PROBLEMS)
 
 
-@app.route("/test")
-def test():
-    return render_template("test.html")
+@app.route("/urgents")
+def urgents():
+    urgent_cars = []
+    for car in cars:
+        if car["urgent"] == True:
+            urgent_cars.append(car)
+    return render_template("urgents.html", car_list=urgent_cars, current_page="urgents")
+
+
+@app.route("/delete_car/<id>")
+def delete_car(id):
+    for car in cars:
+        if car["id"] == id:
+            cars.remove(car)
+            save(cars)
+    return redirect(url_for("cars_list"))
+
+
+@app.route("/edit_car/<id>", methods=["POST", "GET"])
+def edit_car(id):
+    for car in cars:
+        if car["id"] == id:
+            if request.method == "POST":
+                selected_problems = request.form.getlist("problems")
+                car_problems = [
+                    problem
+                    for problem in PROBLEMS
+                    if problem["name"] in selected_problems
+                ]
+                index = cars.index(car)
+                cars.pop(index)
+                cars.insert(
+                    index,
+                    {
+                        "id": id,
+                        "number": request.form["car_number"],
+                        "problems": car_problems,
+                        "img": request.form["image_url"],
+                        "description": capitalize_desc(request.form["description"]),
+                        "urgent": bool(request.form["is_urgent"]),
+                    },
+                )
+                save(cars)
+                return redirect(url_for("cars_list"))
+            else:
+                return render_template(
+                    "edit_car.html",
+                    car=car,
+                    urgency=car["urgent"],
+                    car_problems=car["problems"],
+                    problems=PROBLEMS,
+                )
 
 
 if __name__ == "__main__":

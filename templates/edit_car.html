@@ -1,16 +1,17 @@
-{%extends "base.html"%} {%block title%}Add Car{%endblock%} {%block heading1%}Add
-a car{%endblock%} {%block shortdesc%}Welcome to our Garage please enter your car
-details{%endblock%} {%block car_details%}
-<form method="POST" action="/add_car">
+{%extends "base.html"%} {%block title%}Edit Car{%endblock%} {%block
+heading1%}Edit Car{%endblock%} {%block shortdesc%}Here you can update the car
+information, just in case another problem has appeared or maybe the car
+information was wrong{%endblock%} {%block car_details%}
+<form method="POST" action="/edit_car/{{car.id}}">
   <div class="form-group">
+    {{car.description}}
     <label class="control-label" for="car_number">Car Number:</label>
     <input
       type="text"
       class="form-control"
       id="car_number"
-      placeholder="Enter Car Number"
+      value="{{car.number}}"
       name="car_number"
-      required
     />
   </div>
   <div class="form-group">
@@ -19,9 +20,8 @@ details{%endblock%} {%block car_details%}
       type="text"
       class="form-control"
       id="description"
-      placeholder="Enter Car Description"
+      value="{{car.description}}"
       name="description"
-      required
     />
   </div>
   <div class="form-group">
@@ -32,7 +32,7 @@ details{%endblock%} {%block car_details%}
       name="image_url"
       placeholder="Enter Car Image Link"
       type="url"
-      required
+      value="{{car.img}}"
     />
   </div>
   <div class="form-group">
@@ -44,6 +44,10 @@ details{%endblock%} {%block car_details%}
         value="{{problem.name}}"
         name="problems"
         id="{{problem.name}}"
+        {%if
+        problem
+        in
+        car_problems%}checked{%endif%}
       />
       <label class="form-check-label" for="{{problem.name}}"
         >{{problem.represent}}</label
@@ -62,7 +66,8 @@ details{%endblock%} {%block car_details%}
         name="is_urgent"
         type="radio"
         value="True"
-        required
+        {%if
+        urgency%}checked{%endif%}
       />
     </div>
     <div class="form-check">
@@ -73,10 +78,12 @@ details{%endblock%} {%block car_details%}
         name="is_urgent"
         type="radio"
         value=""
-        required
+        {%if
+        not
+        urgency%}checked{%endif%}
       />
     </div>
   </div>
-  <input type="submit" value="Add Car" />
+  <input type="submit" value="Finish Editting" />
 </form>
 {%endblock%}

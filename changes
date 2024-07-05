@@ -1,0 +1,14 @@
+# THIS IS THE WAY TO FILTER USING URL
+#  urgent = request.args.get("urgent")
+#     fault = request.args.get("problems")
+#     car_list = cars
+#     if fault:
+#         car_list = [car for car in car_list if fault in car.get("problems")]
+#     # Further filter the car_list by the urgent parameter if it is provided
+#     if urgent == "true":
+#         car_list = [car for car in car_list if car.get("urgent")]
+#     return render_template("car_list.html", car_list=car_list, current_page="home")
+
+
+# # PROBLEMS = problems
+# problems = ["engine", "breaks"] # add the strings in the json file

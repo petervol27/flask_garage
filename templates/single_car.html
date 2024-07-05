@@ -1,21 +1,25 @@
-{% include 'header.html'%}
-    <div class="container">
-      <div class="row center-container">
-        <div class="col-sm-4">
-          <div class="panel panel-success">
-            <div class="panel-heading">{{car['number']}}</div>
-            <div class="panel-body">
-              <img
-                src="{{car['img']}}"
-                class="img-responsive"
-                style="width: 100%"
-                alt="Image"
-              />
-            </div>
-            <div class="panel-footer">{{car['description']}}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </body>
-</html>
+{%extends "base.html"%} {%block title%}{{car.description}}{%endblock%} {%block
+heading1%}{{car.description}}{%endblock%} {%block shortdesc%}This is the
+{{car.description}}{%endblock%} {%block center_div%}center-container{%endblock%}
+{%block car_details%}
+<div class="col-sm-4 text-center">
+  <h2>{{car.number}}</h2>
+  <img src="{{car.img}}" alt="{{car.description}}" class="img-fluid" />
+  <p>{{car.description}}</p>
+  <button class="btn btn-primary">
+    <a class="text-white" href="/edit_car/{{car.id}}">Edit Car</a>
+  </button>
+  <button class="btn btn-danger">
+    <a class="text-white" href="/delete_car/{{car.id}}">Delete Car</a>
+  </button>
+  <ul class="list-group mt-4">
+    <h3>Problems to fix:</h3>
+    {%for problem in car.problems%}
+    <li class="list-group-item">{{problem.represent}}</li>
+    {%endfor%}
+  </ul>
+  {%if car.urgent%}
+  <div class="alert alert-danger mt-4" role="alert">This car is Urgent!</div>
+  {%endif%}
+</div>
+{%endblock%}

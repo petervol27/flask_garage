@@ -1,7 +1,7 @@
-{%extends "base.html"%} {%block title%}Car List{%endblock%} {%block
-heading1%}Car List{%endblock%} {%block shortdesc%}This is our car list, click
-anyone of them for more details!{%endblock%} {%block car_details%} {%for car in
-car_list%}
+{%extends "base.html"%} {%block title%}Urgent Car List{%endblock%} {%block
+heading1%}Urgent Car List{%endblock%} {%block shortdesc%}This is our urgent car
+list, we are always in a hurry but these, these are special cars!{%endblock%}
+{%block car_details%} {%for car in car_list%}
 <div class="col-sm-4 text-center">
   <h2>{{car.number}}</h2>
   <img
@@ -16,10 +16,8 @@ car_list%}
       >View details &raquo;</a
     >
   </p>
-  {%if car.urgent%}
   <div class="alert alert-danger d-inline-block" role="alert">
     This car is Urgent!
   </div>
-  {%endif%}
 </div>
 {%endfor%} {%endblock%}
